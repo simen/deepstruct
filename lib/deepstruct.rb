@@ -11,7 +11,7 @@ module DeepStruct
     end
     
     def [](index)
-      return DeepRecord.wrap(@value[index])
+      return DeepStruct.wrap(@value[index])
     end
     
     def []=(index, value)
@@ -37,7 +37,7 @@ module DeepStruct
           @value[method.to_sym] = args[0]
         end
       elsif arg_count == 0
-        DeepRecord.wrap(@value[method] || @value[method.to_sym])
+        DeepStruct.wrap(@value[method] || @value[method.to_sym])
       else
         raise NoMethodError, "undefined method `#{method}' for #{self}", caller(1)
       end
@@ -49,7 +49,7 @@ module DeepStruct
 
     def each
       block_given? or return enum_for(__method__)
-      @value.each { |o| yield(DeepRecord.wrap(o)) }
+      @value.each { |o| yield(DeepStruct.wrap(o)) }
       self
     end
 
@@ -72,7 +72,7 @@ module DeepStruct
     
     # Try json
     begin
-      return DeepRecord.wrap(JSON.parse(string)) if defined?(JSON)
+      return DeepStruct.wrap(JSON.parse(string)) if defined?(JSON)
     rescue JSON::ParserError
     end
       

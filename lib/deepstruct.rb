@@ -61,21 +61,12 @@ module DeepStruct
   
   # Attempt to convert the string to its natural ruby type
   def self.parse(string)
-    return string.to_i if string.to_i.to_s == string
-    return string.to_f if string =~ /^\-?\d+\.\d+(?:e\-?\d+)$/
-    
     # try time
     begin
       return Time.parse(string)
     rescue ArgumentError
     end        
     
-    # Try json
-    begin
-      return DeepStruct.wrap(JSON.parse(string)) if defined?(JSON)
-    rescue JSON::ParserError
-    end
-      
     return string
   end
   

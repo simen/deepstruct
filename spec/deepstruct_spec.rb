@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'json'
 
 describe DeepStruct do
   it "wraps a simple hash" do
@@ -51,6 +52,11 @@ describe DeepStruct do
     struct = DeepStruct.wrap({:a => [1,2,3]})
     struct.a[1].should eq(2)
     struct.a.class.should eq(DeepStruct::ArrayWrapper)
+  end
+
+  it "supports being converted to json" do
+    struct = DeepStruct.wrap({:a => [1,2,3]})
+    struct.to_json.should eq('{"a":[1,2,3]}')
   end
 
 end

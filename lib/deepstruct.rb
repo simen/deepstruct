@@ -19,6 +19,10 @@ module DeepStruct
     def inspect
       "#<#{self.class} #{@value.inspect}>"
     end
+
+    def to_json
+      @value.to_json 
+    end
   end
   
   class HashWrapper < DeepWrapper

@@ -19,7 +19,6 @@ Or if you use the awesomeness that is bundler, you stick this in your Gemfile:
 Usage
 =====
 
-    require 'deepstruct'
     struct = DeepStruct.wrap({:awesome => [1,2,3, {"a" => "hello from the abyss"}]})
     struct.awesome[3].a
       => "hello from the abyss"
@@ -33,3 +32,7 @@ You can also write back through the wrapper with indifferent access
       => #<DeepStruct::HashWrapper {:a=>10, "b"=>20}> 
   
 DeepStruct is a perfect companion to your json-oriented application!
+
+    struct = DeepStruct.wrap(JSON.parse('{"full_name": "Don Corleone"}'))
+    puts struct.to_json
+    {"full_name":"Don Corleone"}

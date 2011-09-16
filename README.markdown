@@ -14,7 +14,7 @@ Not yet published as a gem, so you'll have to
 
 Or if you use the awesomeness that is bundler, you stick this in your Gemfile:
 
-  gem "deepstruct", :git => git@github.com:simen/deepstruct.git
+    gem "deepstruct", :git => git@github.com:simen/deepstruct.git
 
 Usage
 =====

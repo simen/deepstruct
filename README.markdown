@@ -1,7 +1,7 @@
 Deepstruct
 ==========
 
-An adapter that wraps common ruby data-structures and makes them look like regular ruby objects.
+An adapter that wraps common ruby data-structures and makes them look like proper Objects.
 
     struct = DeepStruct.wrap({"a" => { "b" => "bingo!"}})
     struct.a.b

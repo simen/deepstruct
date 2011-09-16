@@ -7,6 +7,12 @@ describe DeepStruct do
     struct.b.should eq(2)
   end
 
+  it "avoids wrapping common datatypes" do
+    DeepStruct.wrap("hello").should eq ("hello")
+    DeepStruct.wrap(1).should eq(1)
+    DeepStruct.wrap(1.0).should eq(1.0)
+  end
+
   it "implements indifferenct access" do
     struct = DeepStruct.wrap({:a => 1, "b" => 2})
     struct.a.should eq(1)
@@ -45,14 +51,6 @@ describe DeepStruct do
     struct = DeepStruct.wrap({:a => [1,2,3]})
     struct.a[1].should eq(2)
     struct.a.class.should eq(DeepStruct::ArrayWrapper)
-  end
-
-  it "parses time objects automagically" do
-    struct = DeepStruct.wrap("2010-10-1")
-    struct.class.should eq(Time)
-    struct.year.should eq(2010)
-    struct.day.should eq(1)
-    struct.month.should eq(10)
   end
 
 end

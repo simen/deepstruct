@@ -1,5 +1,3 @@
-require 'time'
-
 module DeepStruct
   class DeepWrapper
     def initialize(value)
@@ -61,21 +59,8 @@ module DeepStruct
     alias :length :size
   end
   
-  # Attempt to convert the string to its natural ruby type
-  def self.parse(string)
-    # try time
-    begin
-      return Time.parse(string)
-    rescue ArgumentError
-    end        
-    
-    return string
-  end
-  
   def self.wrap(value)
     case value
-    when String
-      self.parse(value)
     when Hash
       return HashWrapper.new(value)
     when Array

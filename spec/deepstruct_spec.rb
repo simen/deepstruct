@@ -59,4 +59,21 @@ describe DeepStruct do
     struct.to_json.should eq('{"a":[1,2,3]}')
   end
 
+  context "HashWrapper, #respond_to?" do
+    it "responds to hash methods" do
+      struct = DeepStruct.wrap({:a => true})
+      struct.size.should eq(1)
+      struct.respond_to?(:size).should be_true
+    end
+
+    it "responds to keys that are present" do
+      struct = DeepStruct.wrap({:a => true})
+      struct.respond_to?(:a).should be_true
+    end
+
+    it "doesn't respond to missing keys" do
+      struct = DeepStruct.wrap({:a => true})
+      struct.respond_to?(:b).should be_false
+    end
+  end
 end

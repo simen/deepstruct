@@ -75,5 +75,10 @@ describe DeepStruct do
       struct = DeepStruct.wrap({:a => true})
       struct.respond_to?(:b).should be_false
     end
+
+    it "responds to keys that can be assigned to" do
+      struct = DeepStruct.wrap({:a => true})
+      struct.respond_to?(:a=).should be_true
+    end
   end
 end

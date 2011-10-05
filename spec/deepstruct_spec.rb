@@ -67,7 +67,7 @@ describe DeepStruct do
     end
 
     it "responds to keys that are present" do
-      struct = DeepStruct.wrap({:a => true})
+      struct = DeepStruct.wrap({:a => nil})
       struct.respond_to?(:a).should be_true
     end
 

@@ -27,7 +27,7 @@ module DeepStruct
   
   class HashWrapper < DeepWrapper
     def respond_to?(method)
-      @value.respond_to?(method) || @value.fetch(method) { false }
+      @value.respond_to?(method) || @value.has_key?(method)
     end
 
     def method_missing(method, *args, &block)

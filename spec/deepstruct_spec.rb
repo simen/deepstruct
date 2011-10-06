@@ -66,8 +66,13 @@ describe DeepStruct do
       struct.respond_to?(:size).should be_true
     end
 
-    it "responds to keys that are present" do
+    it "responds to keys that are present as symbols" do
       struct = DeepStruct.wrap({:a => nil})
+      struct.respond_to?(:a).should be_true
+    end
+
+    it "responds to keys that are present as strings" do
+      struct = DeepStruct.wrap({'a' => nil})
       struct.respond_to?(:a).should be_true
     end
 
@@ -80,5 +85,6 @@ describe DeepStruct do
       struct = DeepStruct.wrap({:a => true})
       struct.respond_to?(:a=).should be_true
     end
+
   end
 end

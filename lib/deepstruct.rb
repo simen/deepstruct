@@ -4,7 +4,7 @@ module DeepStruct
       @value = value
     end
     
-    def raw_value
+    def unwrap
       @value
     end
     

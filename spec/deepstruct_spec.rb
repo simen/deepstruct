@@ -8,6 +8,10 @@ describe DeepStruct do
     struct.b.should eq(2)
   end
 
+  it "can unwrap a wrapped value" do 
+    DeepStruct.wrap([1]).unwrap.should eq [1]
+  end
+
   it "avoids wrapping common datatypes" do
     DeepStruct.wrap("hello").should eq ("hello")
     DeepStruct.wrap(1).should eq(1)

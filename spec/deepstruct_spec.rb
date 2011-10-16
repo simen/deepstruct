@@ -63,6 +63,31 @@ describe DeepStruct do
     struct.to_json.should eq('{"a":[1,2,3]}')
   end
 
+  it "raises NoMethodError when reading missing keys" do
+    ->{DeepStruct.wrap({}).not_there}.should raise_error(NoMethodError)
+  end
+
+  context "HashWrapper, hash-like methods" do
+    it "can be used as a common ruby hash with indifferent access" do
+      struct = DeepStruct.wrap({:a => "hello", 'b' => "world"})
+      struct[:a].should eq "hello"
+      struct['a'].should eq "hello"
+      struct[:b].should eq "world"
+      struct['b'].should eq "world"
+      struct['a'] = "Mmkay"
+      struct[:a].should eq "Mmkay"
+      struct.has_key?("a").should be_true
+    end
+
+    it "can access non string/symbol elements via hashistic syntax" do
+      struct = DeepStruct.wrap({1 => "One"})
+      struct[1].should eq 'One'
+      struct[2] = "Two"
+      struct[2].should eq 'Two'
+      struct['2'].should eq nil
+    end
+  end
+
   context "HashWrapper, #respond_to?" do
     it "responds to hash methods" do
       struct = DeepStruct.wrap({:a => true})

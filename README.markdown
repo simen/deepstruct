@@ -11,15 +11,11 @@ An adapter that wraps common ruby data-structures and makes them look like prope
 Installation
 ============
 
-Not yet published as a gem, so you'll have to
-
-    git clone git@github.com:simen/deepstruct.git
-    cd deepstruct
-    rake install
+    gem install deepstruct
 
 Or if you use the awesomeness that is bundler, you stick this in your Gemfile:
 
-    gem "deepstruct", :git => git@github.com:simen/deepstruct.git
+    gem "deepstruct"
 
 Usage
 =====

@@ -8,7 +8,7 @@ describe DeepStruct do
     struct.b.should eq(2)
   end
 
-  it "can unwrap a wrapped value" do 
+  it "can unwrap a wrapped value" do
     DeepStruct.wrap([1]).unwrap.should eq [1]
   end
 
@@ -40,9 +40,9 @@ describe DeepStruct do
   end
 
   it "wraps arrays and support all common operations" do
-    struct = DeepStruct.wrap([1,2,3,4,5])
+    struct = DeepStruct.wrap([1, 2, 3, 4, 5])
     struct[3].should eq(4)
-    struct.sort{|a,b| b <=> a}.should eq([5,4,3,2,1])
+    struct.sort { |a, b| b <=> a }.should eq([5, 4, 3, 2, 1])
     struct.map(&:to_s).should eq(['1', '2', '3', '4', '5'])
   end
 
@@ -53,18 +53,18 @@ describe DeepStruct do
   end
 
   it "wraps arrays nested within hashes" do
-    struct = DeepStruct.wrap({:a => [1,2,3]})
+    struct = DeepStruct.wrap({:a => [1, 2, 3]})
     struct.a[1].should eq(2)
     struct.a.class.should eq(DeepStruct::ArrayWrapper)
   end
 
   it "supports being converted to json" do
-    struct = DeepStruct.wrap({:a => [1,2,3]})
+    struct = DeepStruct.wrap({:a => [1, 2, 3]})
     struct.to_json.should eq('{"a":[1,2,3]}')
   end
 
   it "raises NoMethodError when reading missing keys" do
-    ->{DeepStruct.wrap({}).not_there}.should raise_error(NoMethodError)
+    -> { DeepStruct.wrap({}).not_there }.should raise_error(NoMethodError)
   end
 
   context "HashWrapper, hash-like methods" do
@@ -114,6 +114,69 @@ describe DeepStruct do
       struct = DeepStruct.wrap({:a => true})
       struct.respond_to?(:a=).should be_true
     end
-
   end
+
+  context "summarizing two wrappers" do
+    it "should raise error for incompatible types" do
+      hash_struct = DeepStruct.wrap({:a => "hello"})
+      array_struct = DeepStruct.wrap(["world"])
+      -> { hash_struct + array_struct }.should raise_error("incompatible wrapper types")
+    end
+
+    it "should sum hash" do
+      struct1 = DeepStruct.wrap({:a => "hello"})
+      struct2 = DeepStruct.wrap({:a => "world"})
+      (struct1 + struct2).unwrap.should eq({:a => "world"})
+
+      struct1 = DeepStruct.wrap({:a => "hello"})
+      struct2 = DeepStruct.wrap({:b => "world"})
+      (struct1 + struct2).unwrap.should eq({:a => "hello", :b => "world"})
+
+      struct1 = DeepStruct.wrap({:a => [1, 2, 3]})
+      struct2 = DeepStruct.wrap({:b => "world"})
+      (struct1 + struct2).unwrap.should eq({:a => [1, 2, 3], :b => "world"})
+
+      struct1 = DeepStruct.wrap({:a => [1, 2, 3]})
+      struct2 = DeepStruct.wrap({[4, 5, 6] => "world"})
+      (struct1 + struct2).unwrap.should eq({:a => [1, 2, 3], [4, 5, 6] => "world"})
+
+      struct1 = DeepStruct.wrap({:a => [1, 2, 3]})
+      struct2 = DeepStruct.wrap({"a" => "world"})
+      (struct1 + struct2).unwrap.should eq({:a => [1, 2, 3], "a" => "world"})
+    end
+
+    it "should sum array" do
+      struct1 = DeepStruct.wrap([1, 2, 3])
+      struct2 = DeepStruct.wrap([4, 5, 6])
+      (struct1 + struct2).unwrap.should eq([1, 2, 3, 4, 5, 6])
+    end
+  end
+
+  context "comparing two structs" do
+    it "should be equal" do
+      struct1 = DeepStruct.wrap({:a => "hello"})
+      struct2 = DeepStruct.wrap({:a => "hello"})
+      (struct1 == struct2).should be_true
+
+      struct1 = DeepStruct.wrap({:a => "hello", :b => "world"})
+      struct2 = DeepStruct.wrap({:b => "world", :a => "hello"})
+      (struct1 == struct2).should be_true
+
+      struct1 = DeepStruct.wrap([1, 2, 3])
+      struct2 = DeepStruct.wrap([1, 2, 3])
+      (struct1 == struct2).should be_true
+
+      struct1 = DeepStruct.wrap({:a => "hello", :b => {:a => 123, :b => 321}})
+      struct2 = DeepStruct.wrap({:b => {:b => 321, :a => 123}, :a => "hello"})
+      (struct1 == struct2).should be_true
+    end
+  end
+
+  it "should raise error for duplicate keys" do
+    struct = DeepStruct.wrap({:a => "hello", 'a' => "world"})
+    pending do
+      struct.a.should eq struct[:a]
+    end
+  end
+
 end

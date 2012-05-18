@@ -114,6 +114,14 @@ describe DeepStruct do
       struct = DeepStruct.wrap({:a => true})
       struct.respond_to?(:a=).should be_true
     end
-
   end
+
+  describe "predicate methods" do
+    subject { DeepStruct.wrap({:a => 1, :b => false, :c => nil, :d => true}) }
+    its(:a?) { should be_true }
+    its(:b?) { should be_false }
+    its(:c?) { should be_false }
+    its(:d?) { should be_true }
+  end
+
 end

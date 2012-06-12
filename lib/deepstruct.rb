@@ -1,3 +1,5 @@
+require 'set'
+
 module DeepStruct
   class DeepWrapper
     def initialize(value)
@@ -87,11 +89,11 @@ module DeepStruct
   def self.wrap(value)
     case value
     when Hash
-      return HashWrapper.new(value)
-    when Enumerable
-      return ArrayWrapper.new(value)
+      HashWrapper.new(value)
+    when Array, Set
+      ArrayWrapper.new(value)
     else
-      return value
+      value
     end
   end
 end

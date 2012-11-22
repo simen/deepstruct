@@ -5,34 +5,34 @@ module DeepStruct
     def initialize(value)
       @value = value
     end
-    
+
     def unwrap
       @value
     end
-    
+
     def [](index)
       return DeepStruct.wrap(@value[index])
     end
-    
+
     def []=(index, value)
       @value[index] = value
     end
-    
+
     def inspect
       "#<#{self.class} #{@value.inspect}>"
     end
 
     def to_json
-      @value.to_json 
+      @value.to_json
     end
   end
-  
+
   class HashWrapper < DeepWrapper
     def respond_to?(method)
-      @value.respond_to?(method) || self.has_key?(method.to_s.chomp('=')) 
+      @value.respond_to?(method) || self.has_key?(method.to_s.chomp('='))
     end
 
-    # Given a symbol or a string this yields the variant of the key that 
+    # Given a symbol or a string this yields the variant of the key that
     # exists in the wrapped hash if any. If none exists (or the key is not
     # a symbol or string) the input value is passed through unscathed.
     def indiffrently(key, &block)
@@ -43,7 +43,7 @@ module DeepStruct
     end
 
     def []=(key, value)
-      indiffrently(key) { |key| @value[key] = value }      
+      indiffrently(key) { |key| @value[key] = value }
     end
 
     def [](key)
@@ -60,7 +60,7 @@ module DeepStruct
       if method.chomp!('?')
         key = method.to_sym
         @value.has_key?(key) && !!@value[key]
-      elsif method.chomp!('=')        
+      elsif method.chomp!('=')
         raise ArgumentError, "wrong number of arguments (#{arg_count} for 1)", caller(1) if args.length != 1
         self[method] = args[0]
       elsif args.length == 0 && self.has_key?(method)
@@ -70,7 +70,7 @@ module DeepStruct
       end
     end
   end
-  
+
   class ArrayWrapper < DeepWrapper
     include Enumerable
 
@@ -85,7 +85,7 @@ module DeepStruct
     end
     alias :length :size
   end
-  
+
   def self.wrap(value)
     case value
     when Hash

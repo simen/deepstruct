@@ -124,4 +124,10 @@ describe DeepStruct do
     its(:d?) { should be_true }
   end
 
+  describe "predicate methods are indifferent" do
+    subject { DeepStruct.wrap({"a" => false, "b" => true}) }
+    its(:a?) { should be_false }
+    its(:b?) { should be_true }
+  end
+
 end

@@ -28,8 +28,8 @@ module DeepStruct
   end
 
   class HashWrapper < DeepWrapper
-    def respond_to?(method)
-      @value.respond_to?(method) || self.has_key?(method.to_s.chomp('='))
+    def respond_to?(method, include_private = false)
+      @value.respond_to?(method, include_private) || self.has_key?(method.to_s.chomp('='))
     end
 
     # Given a symbol or a string this yields the variant of the key that

@@ -22,8 +22,8 @@ module DeepStruct
       "#<#{self.class} #{@value.inspect}>"
     end
 
-    def to_json
-      @value.to_json
+    def to_json(*args)
+      @value.to_json(*args)
     end
   end
 

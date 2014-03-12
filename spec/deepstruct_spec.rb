@@ -63,6 +63,12 @@ describe DeepStruct do
     struct.to_json.should eq('{"a":[1,2,3]}')
   end
 
+  it 'supports being converted to json when inside something else' do
+    struct = DeepStruct.wrap({:a => [1,2,3]})
+    outer = {hello: struct}
+    outer.to_json.should eq('{"hello":{"a":[1,2,3]}}')
+  end
+
   it "raises NoMethodError when reading missing keys" do
     ->{DeepStruct.wrap({}).not_there}.should raise_error(NoMethodError)
   end

@@ -95,30 +95,42 @@ describe DeepStruct do
   end
 
   context "HashWrapper, #respond_to?" do
-    it "responds to hash methods" do
-      struct = DeepStruct.wrap({:a => true})
-      struct.size.should eq(1)
-      struct.respond_to?(:size).should be_true
+    %w(unwrap size each).each do |method_name|
+      it "responds to ##{method_name}" do
+        struct = DeepStruct.wrap({:a => true})
+        struct.respond_to?(method_name).should be_true
+        struct.respond_to?(method_name.to_sym).should be_true
+      end
     end
 
     it "responds to keys that are present as symbols" do
       struct = DeepStruct.wrap({:a => nil})
       struct.respond_to?(:a).should be_true
+      struct.respond_to?('a').should be_true
     end
 
     it "responds to keys that are present as strings" do
       struct = DeepStruct.wrap({'a' => nil})
       struct.respond_to?(:a).should be_true
+      struct.respond_to?('a').should be_true
     end
 
     it "doesn't respond to missing keys" do
       struct = DeepStruct.wrap({:a => true})
       struct.respond_to?(:b).should be_false
+      struct.respond_to?('b').should be_false
     end
 
     it "responds to keys that can be assigned to" do
       struct = DeepStruct.wrap({:a => true})
       struct.respond_to?(:a=).should be_true
+      struct.respond_to?('a=').should be_true
+    end
+
+    it "responds to keys with '?' suffix" do
+      struct = DeepStruct.wrap({:a => true})
+      struct.respond_to?(:a?).should be_true
+      struct.respond_to?('a?').should be_true
     end
   end
 

@@ -26,7 +26,7 @@ Usage
 
 You can also write back through the wrapper with indifferent access
 
-    struct = DeepStruct.wrap({:a => 1, "b" => 2})
+    struct = DeepStruct.wrap({:a => 10, "b" => 20})
     struct.a = 10
     struct.b = 20
     struct
